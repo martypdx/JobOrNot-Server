@@ -1,0 +1,38 @@
+
+{
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "modules": true,
+            "impliedStrict": true
+        }
+    },
+    "env": {
+        "node": true,
+        "mocha": true,
+        "es6": true,
+        "mongo": true,
+        "commonjs": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+        "no-console": "off",
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
