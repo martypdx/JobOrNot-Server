@@ -1,0 +1,23 @@
+language: node_js
+
+node_js:
+  node
+
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - mongodb-3.2-precise
+
+    packages:
+      - g++-4.8
+      - mongodb-org-server
+install: 
+  - cd $TRAVIS_BUILD_DIR/app && npm install
+  - cd $TRAVIS_BUILD_DIR/server && npm install
+
+script:
+  - cd $TRAVIS_BUILD_DIR/app && npm test
+  - cd $TRAVIS_BUILD_DIR/server && npm test
