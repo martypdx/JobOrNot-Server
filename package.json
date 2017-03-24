@@ -4,11 +4,12 @@
   "description": "server for jobornot",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sdcaulley/JobOrNot.git"
+    "url": "git+https://github.com/sdcaulley/JobOrNot-server.git"
   },
   "keywords": [
     "node",
@@ -18,9 +19,9 @@
   "author": "team banana-guava",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sdcaulley/JobOrNot/issues"
+    "url": "https://github.com/sdcaulley/JobOrNot-server/issues"
   },
-  "homepage": "https://github.com/sdcaulley/JobOrNot#readme",
+  "homepage": "https://github.com/sdcaulley/JobOrNot-server#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.1",
