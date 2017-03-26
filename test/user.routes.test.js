@@ -54,13 +54,13 @@ describe('user', () => {
 
         it('can\'t use same username', () => 
             request
-                .post('signup')
+                .post('/signup')
                 .send(user)
                 .then(
                     () => { throw new Error('status should not be ok'); },
                     res => {
                         assert.equal(res.status, 400);
-                        assert.equal(res.response.body.error, 'username user already exists')
+                        assert.equal(res.response.body.error, `Username ${user.username} already exists`)
                     }
                 )
         );
