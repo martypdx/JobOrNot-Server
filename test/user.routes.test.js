@@ -16,7 +16,7 @@ describe('user', () => {
     const user = {
         username: 'user',
         password: 'password'
-    }
+    };
 
     const request = chai.request(app);
 
@@ -24,25 +24,26 @@ describe('user', () => {
         
         const badRequest = (url, data, error) =>
             request
-                /post(url)
+                .post(url)
                 .send(data)
                 .then(
                     () => { throw new Error('Status should not be OK'); },
                     res => {
-                        assert.equal(res.status, 400)
+                        assert.equal(res.status, 400);
                         assert.equal(res.response.body.error, error);
                     }
                 );
+    
         it('signup requires username', () =>
             badRequest('/signup', { password: 'password' },
-            'username and passowrd must be provided')
+            'Username and Password Must Be Provided')
         );
 
         it('signup requires password', () => 
-            badRequest('/signup', { username: 'username' }, 'username and password must be provided')
+            badRequest('/signup', { username: 'username' }, 'Username and Password Must Be Provided')
         );
 
-        let token = '',
+        let token = '';
 
         it('signup', () => 
             request
