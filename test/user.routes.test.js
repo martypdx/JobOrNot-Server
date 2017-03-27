@@ -62,7 +62,7 @@ describe('user', () => {
                     () => { throw new Error('status should not be ok'); },
                     res => {
                         assert.equal(res.status, 400);
-                        assert.equal(res.response.body.error, `Username ${user.username} already exists`)
+                        assert.equal(res.response.body.error, `Username ${user.username} already exists`);
                     }
                 )
         );
@@ -89,22 +89,21 @@ describe('user', () => {
         );
 
         it('user can update username', () => {
-            console.log('USER', user);
             return request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
-                    console.log('userID', user._id);
+                    console.log(token);
                     return request
-                        .patch(`/changeAccountInfo/${user._id}`)
+                        .patch('/changeAccountInfo')
                         .send({ username: 'changedUser'})
                         .set('Authorization', token);
                 })
                 .then(res => {
-                    console.log(res.body.username);
+                    console.log(res.body);
                     assert.equal(res.body.username, 'changedUser');
                 });
         });
     });
-});
+});             
