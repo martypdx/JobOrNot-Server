@@ -121,6 +121,6 @@ describe('user', () => {
                 .then(res => {
                     assert.equal(res.body.message, 'Your user account has been deleted!');
                 });
-        })
+        });
     });
 });             
