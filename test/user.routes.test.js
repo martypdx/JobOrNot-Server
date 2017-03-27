@@ -5,14 +5,8 @@ chai.use(chaiHttp);
 const assert = chai.assert;
 
 const app = require('../lib/app');
-const mongoose = require('mongoose');
-
-process.env.DB_URI = 'mongodb://localhost:27017/user-routes-test';
-require('../lib/connection');
 
 describe('user', () => {
-    before(() => mongoose.connection.dropDatabase());
-
     const user = {
         username: 'user',
         password: 'password',
@@ -101,7 +95,6 @@ describe('user', () => {
                         .set('Authorization', token);
                 })
                 .then(res => {
-                    console.log(res.body);
                     assert.equal(res.body.username, 'changedUser');
                     assert.equal(res.body.name, 'caped crusader');
                     assert.deepEqual(res.body.skills, ['hotel management', 'being the best at everything hireeemeeeeeee']);
