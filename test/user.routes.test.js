@@ -89,11 +89,13 @@ describe('user', () => {
         );
 
         it('user can update username', () => {
+            console.log('USER', user);
             return request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
+                    console.log('userID', user._id);
                     return request
                         .patch(`/changeAccountInfo/${user._id}`)
                         .send({ username: 'changedUser'})
