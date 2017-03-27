@@ -89,20 +89,22 @@ describe('user', () => {
         );
 
         it('user can update properties of the user object', () => {
+
             return request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
-                    console.log(token);
                     return request
                         .patch('/changeAccountInfo')
-                        .send({ username: 'changedUser'})
+                        .send({ username: 'changedUser', password: 'newpassword', name: 'caped crusader', skills: ['hotel management', 'being the best at everything hireeemeeeeeee']})
                         .set('Authorization', token);
                 })
                 .then(res => {
                     console.log(res.body);
                     assert.equal(res.body.username, 'changedUser');
+                    assert.equal(res.body.name, 'caped crusader');
+                    assert.deepEqual(res.body.skills, ['hotel management', 'being the best at everything hireeemeeeeeee']);
                 });
         });
 
@@ -112,7 +114,6 @@ describe('user', () => {
                 .send({ username: 'changedUser', password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
-                    console.log('TOKEN', token);
                     return request
                         .delete('/deleteAccount')
                         .send(user._id)
