@@ -5,14 +5,8 @@ chai.use(chaiHttp);
 const assert = chai.assert;
 
 const app = require('../lib/app');
-const mongoose = require('mongoose');
-
-process.env.DB_URI = 'mongodb://localhost:27017/user-routes-test';
-require('../lib/connection');
 
 describe('user', () => {
-    before(() => mongoose.connection.dropDatabase());
-
     const user = {
         username: 'user',
         password: 'password',
@@ -94,14 +88,12 @@ describe('user', () => {
                 .send({ username: user.username, password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
-                    console.log(token);
                     return request
                         .patch('/changeAccountInfo')
                         .send({ username: 'changedUser'})
                         .set('Authorization', token);
                 })
                 .then(res => {
-                    console.log(res.body);
                     assert.equal(res.body.username, 'changedUser');
                 });
         });
@@ -112,7 +104,6 @@ describe('user', () => {
                 .send({ username: 'changedUser', password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
-                    console.log('TOKEN', token);
                     return request
                         .delete('/deleteAccount')
                         .send(user._id)
