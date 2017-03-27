@@ -62,7 +62,7 @@ describe('user', () => {
                     () => { throw new Error('status should not be ok'); },
                     res => {
                         assert.equal(res.status, 400);
-                        assert.equal(res.response.body.error, `Username ${user.username} already exists`)
+                        assert.equal(res.response.body.error, `Username ${user.username} already exists`);
                     }
                 )
         );
@@ -88,23 +88,39 @@ describe('user', () => {
                 )
         );
 
-        it('user can update username', () => {
-            console.log('USER', user);
+        it('user can update properties of the user object', () => {
             return request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
-                    console.log('userID', user._id);
+                    console.log(token);
                     return request
-                        .patch(`/changeAccountInfo/${user._id}`)
+                        .patch('/changeAccountInfo')
                         .send({ username: 'changedUser'})
                         .set('Authorization', token);
                 })
                 .then(res => {
-                    console.log(res.body.username);
+                    console.log(res.body);
                     assert.equal(res.body.username, 'changedUser');
                 });
         });
+
+        it('user can delete their account', () => {
+            return request
+                .post('/signin')
+                .send({ username: 'changedUser', password: user.password, email: user.email })
+                .then(res => res.body.token)
+                .then((token) => {
+                    console.log('TOKEN', token);
+                    return request
+                        .delete('/deleteAccount')
+                        .send(user._id)
+                        .set('Authorization', token);
+                })
+                .then(res => {
+                    assert.equal(res.body.message, 'Your user account has been deleted!');
+                });
+        });
     });
-});
+});             
