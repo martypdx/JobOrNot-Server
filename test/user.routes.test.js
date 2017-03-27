@@ -88,7 +88,7 @@ describe('user', () => {
                 )
         );
 
-        it('user can update username', () => {
+        it('user can update properties of the user object', () => {
             return request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
@@ -105,5 +105,22 @@ describe('user', () => {
                     assert.equal(res.body.username, 'changedUser');
                 });
         });
+
+        it('user can delete their account', () => {
+            return request
+                .post('/signin')
+                .send({ username: 'changedUser', password: user.password, email: user.email })
+                .then(res => res.body.token)
+                .then((token) => {
+                    console.log('TOKEN', token);
+                    return request
+                        .delete('/deleteAccount')
+                        .send(user._id)
+                        .set('Authorization', token);
+                })
+                .then(res => {
+                    assert.equal(res.body.message, 'Your user account has been deleted!');
+                });
+        })
     });
 });             
