@@ -7,7 +7,7 @@ const request = chai.request(app);
 
 describe('upload routes', () => {
     let resumeOne = {
-        resumeImage: './Resume-Nov2016.pdf',
+        files: './Resume-Nov2016.pdf',
         likedBy: []
     };
 
