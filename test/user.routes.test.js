@@ -15,7 +15,9 @@ describe('user', () => {
 
     const user = {
         username: 'user',
-        password: 'password'
+        password: 'password',
+        name: 'faker mcuser',
+        email: 'fakeEmail@fakeEmail.com'
     };
 
     const request = chai.request(app);
@@ -64,5 +66,43 @@ describe('user', () => {
                     }
                 )
         );
-    })
-})
+
+        it('signin requires username', () => 
+            badRequest('/signin', { password: 'password' }, 'Username and Password Must Be Provided')
+        );
+
+        it('signin requires password', () =>
+            badRequest('/signin', { username: 'user' }, 'Username and Password Must Be Provided')
+        );
+
+        it('signin with wrong user', () =>
+            request
+                .post('/signin')
+                .send({ username: 'bad user', password: user.password })
+                .then(
+                    () => { throw new Error('status should not be ok');},
+                    res => {
+                        assert.equal(res.status, 400);
+                        assert.equal(res.response.body.error, 'invalid username or password');
+                    }
+                )
+        );
+
+        it('user can update username', () => {
+            return request
+                .post('/signin')
+                .send({ username: user.username, password: user.password, email: user.email })
+                .then(res => res.body.token)
+                .then((token) => {
+                    return request
+                        .patch(`/changeAccountInfo/${user._id}`)
+                        .send({ username: 'changedUser'})
+                        .set('Authorization', token);
+                })
+                .then(res => {
+                    console.log(res.body.username);
+                    assert.equal(res.body.username, 'changedUser');
+                });
+        });
+    });
+});
