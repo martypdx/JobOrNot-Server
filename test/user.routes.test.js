@@ -104,7 +104,7 @@ describe('user', () => {
         it('user can delete their account', () => {
             return request
                 .post('/signin')
-                .send({ username: 'changedUser', password: user.password, email: user.email })
+                .send({ username: 'changedUser', password: 'newpassword', email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
                     return request
