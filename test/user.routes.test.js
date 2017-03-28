@@ -10,7 +10,7 @@ describe('user', () => {
     const user = {
         username: 'user',
         password: 'password',
-        name: 'faker mcuser',
+        firstName: 'faker mcuser',
         email: 'fakeEmail@fakeEmail.com'
     };
 
@@ -83,6 +83,7 @@ describe('user', () => {
         );
 
         it('user can update properties of the user object', () => {
+
             return request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
@@ -90,18 +91,21 @@ describe('user', () => {
                 .then((token) => {
                     return request
                         .patch('/changeAccountInfo')
-                        .send({ username: 'changedUser'})
+                        .send({ username: 'changedUser', password: 'newpassword', firstName: 'caped', lastName: 'crusader', skills: ['hotel management', 'being the best at everything hireeemeeeeeee']})
                         .set('Authorization', token);
                 })
                 .then(res => {
                     assert.equal(res.body.username, 'changedUser');
+                    assert.equal(res.body.firstName, 'caped');
+                    assert.equal(res.body.lastName, 'crusader');
+                    assert.deepEqual(res.body.skills, ['hotel management', 'being the best at everything hireeemeeeeeee']);
                 });
         });
 
         it('user can delete their account', () => {
             return request
                 .post('/signin')
-                .send({ username: 'changedUser', password: user.password, email: user.email })
+                .send({ username: 'changedUser', password: 'newpassword', email: user.email })
                 .then(res => res.body.token)
                 .then((token) => {
                     return request
