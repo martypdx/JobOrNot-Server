@@ -84,7 +84,7 @@ describe('user', () => {
 
         it('user can update properties of the user object', () => {
 
-            return request
+            request
                 .post('/signin')
                 .send({ username: user.username, password: user.password, email: user.email })
                 .then(res => res.body.token)
