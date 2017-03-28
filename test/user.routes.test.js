@@ -10,7 +10,7 @@ describe('user', () => {
     const user = {
         username: 'user',
         password: 'password',
-        name: 'faker mcuser',
+        firstName: 'faker mcuser',
         email: 'fakeEmail@fakeEmail.com'
     };
 
@@ -91,12 +91,13 @@ describe('user', () => {
                 .then((token) => {
                     return request
                         .patch('/changeAccountInfo')
-                        .send({ username: 'changedUser', password: 'newpassword', name: 'caped crusader', skills: ['hotel management', 'being the best at everything hireeemeeeeeee']})
+                        .send({ username: 'changedUser', password: 'newpassword', firstName: 'caped', lastName: 'crusader', skills: ['hotel management', 'being the best at everything hireeemeeeeeee']})
                         .set('Authorization', token);
                 })
                 .then(res => {
                     assert.equal(res.body.username, 'changedUser');
-                    assert.equal(res.body.name, 'caped crusader');
+                    assert.equal(res.body.firstName, 'caped');
+                    assert.equal(res.body.lastName, 'crusader');
                     assert.deepEqual(res.body.skills, ['hotel management', 'being the best at everything hireeemeeeeeee']);
                 });
         });
