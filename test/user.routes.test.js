@@ -10,8 +10,7 @@ describe('user', () => {
     const user = {
         username: 'user',
         password: 'password',
-        firstName: 'faker mcuser',
-        email: 'fakeEmail@fakeEmail.com'
+        firstName: 'faker mcuser'
     };
 
     const request = chai.request(app);
