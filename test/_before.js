@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
-process.env.MONGODB_URI = 'mongodb://localhost:27017/user-routes-test';
 require('../lib/connection');
+process.env.MONGODB_URI = 'mongodb://localhost:27017/user-routes-test';
 
 before(() => {
-    mongoose.connection.dropDatabase();
+    mongoose.connection.dropDatabase(() => {
+        console.log('db dropped');
+    });
 });
