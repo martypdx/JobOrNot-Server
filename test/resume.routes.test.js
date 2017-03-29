@@ -10,16 +10,14 @@ const request = chai.request(app);
 const Resume = require('../lib/models/resume.schema');
 
 
-describe.only('resume', () => {
+describe('resume', () => {
     
     describe('resume management', () => {
         const testResume = fs.readFileSync(__dirname + '/hotelmanagement.pdf');
 
         const user1 = {
-            username: 'user',
-            password: 'password',
-            firstName: 'faker mcuser',
-            email: 'fakeEmail@fakeEmail.com'
+            username: 'dobby',
+            password: 'ilikesocks'
         };
 
         const user2 = {
