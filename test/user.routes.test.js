@@ -10,7 +10,8 @@ describe('user', () => {
     const user = {
         username: 'user',
         password: 'password',
-        firstName: 'faker mcuser'
+        firstName: 'faker mcuser',
+        email: 'fakeemail@fakeemail.com'
     };
 
     const request = chai.request(app);
@@ -80,6 +81,24 @@ describe('user', () => {
                     }
                 )
         );
+
+        it('user can get their profile', () => {
+            request
+                .post('/signin')
+                .send({username: user.username, password: user.password})
+                .then(res => {
+                    return res.body.token;
+                })
+                .then((token) => {
+                    console.log('FUCK', user.id);
+                    return request
+                        .get(`/profile/${user.id}`)
+                        .set('Authorization', token)
+                        .then(res => {
+                            assert.equal(res.body.email, 'fakeremail@fakeemail.com')
+                        });
+                });
+        });
 
         it('user can update properties of the user object', () => {
 
