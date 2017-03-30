@@ -5,7 +5,8 @@
         "sourceType": "module",
         "ecmaFeatures": {
             "modules": true,
-            "impliedStrict": true
+            "impliedStrict": true,
+            "experimentalObjectRestSpread": true
         }
     },
     "env": {
@@ -29,6 +30,7 @@
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "prefer-spread": "error"
     }
 }
