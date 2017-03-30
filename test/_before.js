@@ -1,10 +1,15 @@
+const chai = require('chai');
+
 const mongoose = require('mongoose');
 
 require('../lib/connection');
 process.env.MONGODB_URI = 'mongodb://localhost:27017/user-routes-test';
 
-before(() => {
-    mongoose.connection.dropDatabase(() => {
+before((done) => {
+    const drop = () => mongoose.connection.dropDatabase(() =>{
+        done();
         console.log('db dropped');
     });
+    if(mongoose.connection.readyState === 1) drop();
+    else mongoose.connection.on( 'open', drop);
 });
