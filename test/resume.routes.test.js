@@ -12,7 +12,7 @@ const Resume = require('../lib/models/resume.schema');
 
 describe('resume', () => {
     
-    describe.only('resume management', () => {
+    describe('resume management', () => {
         const testResume = fs.readFileSync(__dirname + '/hotelmanagement.pdf');
 
         const user1 = {
@@ -55,16 +55,15 @@ describe('resume', () => {
             request
                 .post('/signup')
                 .send(user3)
-                .then(res => { 
-                    console.log(res.body);
-                    res.send(res.body);
+                .then(res => {
+                    res.body;
                 })
-                .then((token) => {
-                    console.log('IM HERE', token);
+                .then((body) => {
+                    console.log('IM HERE', body);
                     return request
-                        .patch('/myResume')
+                        .patch(`/myResume/${body._id}`)
                         .send(data)
-                        .set('Authorizaton', token)
+                        .set('Authorizaton', body.token)
                         .then(res => {
                             console.log('RES BODY', res.body.testResume3.skills);
                             assert.deepEqual(res.body.testResume3.skills, ['management']);
