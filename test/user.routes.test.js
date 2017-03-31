@@ -10,7 +10,8 @@ describe('user', () => {
     const user = {
         username: 'user',
         password: 'password',
-        firstName: 'faker mcuser'
+        firstName: 'faker mcuser',
+        email: 'fakeemail@fakeemail.com'
     };
 
     const request = chai.request(app);
@@ -81,6 +82,24 @@ describe('user', () => {
                 )
         );
 
+        it('user can get their profile', () => {
+            request
+                .post('/signin')
+                .send({username: user.username, password: user.password})
+                .then(res => {
+                    return res.body.token;
+                })
+                .then((token) => {
+                    console.log('FUCK', user.id);
+                    return request
+                        .get(`/profile/${user.id}`)
+                        .set('Authorization', token)
+                        .then(res => {
+                            assert.equal(res.body.email, 'fakeremail@fakeemail.com')
+                        });
+                });
+        });
+
         it('user can update properties of the user object', () => {
 
             request
@@ -90,7 +109,7 @@ describe('user', () => {
                 .then((token) => {
                     return request
                         .patch('/changeAccountInfo')
-                        .send({ username: 'changedUser', password: 'newpassword', firstName: 'caped', lastName: 'crusader', skills: ['hotel management', 'being the best at everything hireeemeeeeeee']})
+                        .send({ username: 'changedUser', firstName: 'caped', lastName: 'crusader', skills: ['hotel management', 'being the best at everything hireeemeeeeeee']})
                         .set('Authorization', token);
                 })
                 .then(res => {
@@ -102,14 +121,17 @@ describe('user', () => {
         });
 
         it('user can delete their account', () => {
-            return request
+            request
                 .post('/signin')
-                .send({ username: 'changedUser', password: 'newpassword', email: user.email })
-                .then(res => res.body.token)
+                .send({ username: 'changedUser', password: user.password, email: user.email })
+                .then(res => {
+                    console.log('IM HERE');
+                    res.body.token;
+                })
                 .then((token) => {
                     return request
                         .delete('/deleteAccount')
-                        .send(user._id)
+                        .send(user.id)
                         .set('Authorization', token);
                 })
                 .then(res => {
