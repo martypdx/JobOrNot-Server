@@ -37,7 +37,6 @@ describe('resume', () => {
                 .set('Content-Type', 'application/octet-stream')
                 .send(testResume)
                 .then(res => {
-                    console.log('FILE', res.body.file);
                     assert.ok(res.body.file);
                 });
         }); //this test is currently failing probably because no user signin
@@ -59,13 +58,11 @@ describe('resume', () => {
                     res.body;
                 })
                 .then((body) => {
-                    console.log('IM HERE', body);
                     return request
                         .patch(`/myResume/${body._id}`)
                         .send(data)
                         .set('Authorizaton', body.token)
                         .then(res => {
-                            console.log('RES BODY', res.body.testResume3.skills);
                             assert.deepEqual(res.body.testResume3.skills, ['management']);
                         });
                 });
@@ -91,7 +88,6 @@ describe('resume', () => {
             let user2Token = '';
 
             let user1ResId = '';
-            console.log('user 1', user1);
             request
                 .post('/signup')
                 .send(user1)
