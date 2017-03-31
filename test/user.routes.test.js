@@ -90,7 +90,6 @@ describe('user', () => {
                     return res.body.token;
                 })
                 .then((token) => {
-                    console.log('FUCK', user.id);
                     return request
                         .get(`/profile/${user.id}`)
                         .set('Authorization', token)
@@ -125,7 +124,6 @@ describe('user', () => {
                 .post('/signin')
                 .send({ username: 'changedUser', password: user.password, email: user.email })
                 .then(res => {
-                    console.log('IM HERE');
                     res.body.token;
                 })
                 .then((token) => {
