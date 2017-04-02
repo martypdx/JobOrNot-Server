@@ -1,0 +1,3 @@
+Heroku Deploy
+
+- remove test and other extraneous files
