@@ -9,6 +9,7 @@ const request = chai.request(app);
 
 const Resume = require('../lib/models/resume.schema');
 
+//IMPORTANT NOTE: many of these tests for resume routes at this time cannot be successfully conducted: There is a hang-up with posting a resume while in test, that has yet to be solved. Thus, attempting to post, delete, or patch a resume will not work until the problem is discovered and fixed.
 
 describe('resume', () => {
     
@@ -30,16 +31,26 @@ describe('resume', () => {
             password: 'evilllllll'
         };
 
-        it.skip('can post a resume', () => {
-
+        it('can post a resume', () => {
             request
-                .post('/myResume')
-                .set('Content-Type', 'application/octet-stream')
-                .send(testResume)
+                .post('/signup')
+                .send(user2)
                 .then(res => {
-                    assert.ok(res.body.file);
+                    console.log('MADE IT HERE');
+                    return res.body.token;
+                })
+                .then((token) => {
+                    return request
+                        .post('/myResume')
+                        .set('Authorization', token)
+                        .set('Content-Type', 'application/octet-stream')
+                        .send(testResume)
+                        .then(res => {
+                            console.log('How about here?');
+                            assert.ok(res.body.file);
+                        });
                 });
-        }); //this test is currently failing probably because no user signin
+        }); //this test is currently not making it to the asset block for reasons that elude me... the error messages refer to broken promise chains and being unable to read property 'name' of undefined, which seems to indicate a problem with the resume .pdf itself, but in logging the resume in the console we see that it is in fact becoming the buffer we need it to be. Async problems may also be indicated because unless the other tests run, we don't get our console log 'MADE IT HERE'.
     
         it('updates resume skills and user reference', () => {
             let testResume3 = new Resume({
@@ -83,26 +94,30 @@ describe('resume', () => {
                 .catch(() => { throw new Error('Status should not be OK'); });
         });
 
-        it.skip('user cannot delete another user\'s resume', () => {
-            let user1Token = '';
-            let user2Token = '';
+        it('user can delete their own resume', () => {
+            let testresume3 = new Resume({
+                file: fs.readFileSync(__dirname + '/hotelmanagement.pdf'),
+                name: 'testRes',
+                user: user2._id
+            });
 
-            let user1ResId = '';
+            console.log('RES USER', testresume3.user);
             request
-                .post('/signup')
-                .send(user1)
+                .post('/signin')
+                .send(user2)
                 .then(res => {
-                    user1Token = res.body.token;
-                    // return request
-                    //     .post('/myResume')
-                    //     .send(testResume)
-                    //     .then(res => {
-                    //         if(!res) throw 'Fail';
-                    //         console.log(res.response);
-
-                    //     });
+                    console.log('MADE IT HERE', res.body);
+                    res.body.token;
+                })
+                .then((token) => {
+                    return request
+                        .delete(`/myResume/${testresume3._id}`)
+                        .set('Authorization', token)
+                        .then(res => {
+                            console.log(res.body.message);
+                            assert.equal(res.body.message, 'This Resume Has Been Deleted');
+                        });
                 });
-
         });
     });
 });
