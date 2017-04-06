@@ -39,13 +39,11 @@ describe('user', () => {
             badRequest('/signup', { username: 'username' }, 'Username and Password Must Be Provided')
         );
 
-        let token = '';
-
         it('signup', () => 
             request
                 .post('/signup')
                 .send(user)
-                .then(res => assert.ok(token = res.body.token))
+                .then(res => assert.ok(res.body.token))
         );
 
         it('can\'t use same username', () => 
@@ -94,7 +92,7 @@ describe('user', () => {
                         .get(`/profile/${user.id}`)
                         .set('Authorization', token)
                         .then(res => {
-                            assert.equal(res.body.email, 'fakeremail@fakeemail.com')
+                            assert.equal(res.body.email, 'fakeremail@fakeemail.com');
                         });
                 });
         });
@@ -129,7 +127,6 @@ describe('user', () => {
                 .then((token) => {
                     return request
                         .delete('/deleteAccount')
-                        .send(user.id)
                         .set('Authorization', token);
                 })
                 .then(res => {

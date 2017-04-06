@@ -16,11 +16,6 @@ describe('resume', () => {
     describe('resume management', () => {
         const testResume = fs.readFileSync(__dirname + '/hotelmanagement.pdf');
 
-        const user1 = {
-            username: 'dobby',
-            password: 'ilikesocks'
-        };
-
         const user2 = {
             username: 'hagrid',
             password: 'youreawizardharry!'
@@ -36,7 +31,6 @@ describe('resume', () => {
                 .post('/signup')
                 .send(user2)
                 .then(res => {
-                    console.log('MADE IT HERE');
                     return res.body.token;
                 })
                 .then((token) => {
@@ -46,17 +40,12 @@ describe('resume', () => {
                         .set('Content-Type', 'application/octet-stream')
                         .send(testResume)
                         .then(res => {
-                            console.log('How about here?');
                             assert.ok(res.body.file);
                         });
                 });
         }); //this test is currently not making it to the asset block for reasons that elude me... the error messages refer to broken promise chains and being unable to read property 'name' of undefined, which seems to indicate a problem with the resume .pdf itself, but in logging the resume in the console we see that it is in fact becoming the buffer we need it to be. Async problems may also be indicated because unless the other tests run, we don't get our console log 'MADE IT HERE'.
     
         it('updates resume skills and user reference', () => {
-            let testResume3 = new Resume({
-                file: fs.readFileSync(__dirname + '/hotelmanagement.pdf'),
-                name: 'testres'
-            });
 
             let data = {
                 skills: ['management'],
@@ -119,5 +108,8 @@ describe('resume', () => {
                         });
                 });
         });
+
+        // would be good to test that a user can NOT delete someone else's resume!!!
+        
     });
 });

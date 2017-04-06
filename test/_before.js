@@ -1,5 +1,3 @@
-const chai = require('chai');
-
 const mongoose = require('mongoose');
 
 require('../lib/connection');
